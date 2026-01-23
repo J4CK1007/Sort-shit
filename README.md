@@ -21,3 +21,9 @@ Third step:
 Fourth step:
 
     Press play in Unity and the game should run  
+
+AI PROMPT:
+
+    AI prompt and scoring rules is located in the grader-backend file -> server.js
+    And it is under const prompt=
+    You can open the file in notepad to change and mess around with it
