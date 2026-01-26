@@ -1355,14 +1355,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 363c76de416e9814499ce42b3db10416, type: 2}
   - {fileID: 11400000, guid: 3fdab215cafb846409eaf3c62870c72f, type: 2}
   shuffleOnStart: 1
-  itemsToPresent: 10
+  itemsToPresent: 30
   nameText: {fileID: 1038418632}
   descriptionText: {fileID: 0}
   iconImage: {fileID: 1142962040}
   startButton: {fileID: 772512283}
   pileCount: 6
   nextItemDelay: 1.5
-  autoSkipDelay: 3
+  autoSkipDelay: 5
 --- !u!4 &683069282
 Transform:
   m_ObjectHideFlags: 0
