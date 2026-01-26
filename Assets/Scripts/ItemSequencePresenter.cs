@@ -11,6 +11,10 @@ public class ItemSequencePresenter : MonoBehaviour
     [SerializeField] private List<ItemData> items = new();
     [SerializeField] private bool shuffleOnStart = true;
 
+    [Header("Sequence Length")]
+    [Tooltip("How many items to present this run. 0 = present all items in the list.")]
+    [SerializeField] private int itemsToPresent = 0;
+
     [Header("UI")]
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
@@ -22,6 +26,9 @@ public class ItemSequencePresenter : MonoBehaviour
 
     [Header("Timing")]
     [SerializeField] private float nextItemDelay = 1.5f;
+
+    [Tooltip("Seconds before auto-skipping an item if not sorted.")]
+    [SerializeField] private float autoSkipDelay = 3f;
 
     public int CurrentIndex { get; private set; } = -1;
     public ItemData CurrentItem { get; private set; }
@@ -40,6 +47,8 @@ public class ItemSequencePresenter : MonoBehaviour
     private bool hasStarted = false;
     private bool isWaitingForNext = false;
 
+    private Coroutine autoSkipCoroutine;
+
     private void Start()
     {
         if (items == null || items.Count == 0)
@@ -55,7 +64,11 @@ public class ItemSequencePresenter : MonoBehaviour
         for (int i = 1; i <= pileCount; i++)
             Piles[i] = new List<ItemData>();
 
+        // Shuffle the full list (optional)
         if (shuffleOnStart) Shuffle(items);
+
+        // Apply the presentation limit AFTER shuffling, so you get a random subset.
+        ApplyItemsToPresentLimit();
 
         // Start with a completely blank UI
         ClearUI();
@@ -108,6 +121,8 @@ public class ItemSequencePresenter : MonoBehaviour
 
         if (CurrentIndex >= items.Count)
         {
+            StopAutoSkipTimer();
+
             ClearUI();
             CurrentItem = null;
             sequenceFinished = true;
@@ -121,6 +136,8 @@ public class ItemSequencePresenter : MonoBehaviour
         CurrentItem = items[CurrentIndex];
         UpdateUI(CurrentItem);
         OnItemPresented?.Invoke(CurrentItem);
+
+        StartAutoSkipTimer();
     }
 
     // Called by SortInput script
@@ -135,6 +152,8 @@ public class ItemSequencePresenter : MonoBehaviour
             return;
         }
 
+        StopAutoSkipTimer();
+
         ItemData itemToSort = CurrentItem;
         CurrentItem = null;
         isWaitingForNext = true;
@@ -142,7 +161,7 @@ public class ItemSequencePresenter : MonoBehaviour
         Piles[pileNumber].Add(itemToSort);
 
         OnItemSorted?.Invoke(itemToSort, pileNumber);
-        Debug.Log($"Sorted '{itemToSort.displayName}' into pile {pileNumber}.");
+        Debug.Log($"Sorted '{itemToSort.DisplayName}' into pile {pileNumber}.");
 
         StartCoroutine(DelayedNextItem());
     }
@@ -154,11 +173,61 @@ public class ItemSequencePresenter : MonoBehaviour
         PresentNext();
     }
 
+    // ================= AUTO SKIP =================
+
+    private void StartAutoSkipTimer()
+    {
+        if (autoSkipDelay <= 0f) return;
+
+        StopAutoSkipTimer();
+        autoSkipCoroutine = StartCoroutine(AutoSkipCurrentItem());
+    }
+
+    private void StopAutoSkipTimer()
+    {
+        if (autoSkipCoroutine != null)
+        {
+            StopCoroutine(autoSkipCoroutine);
+            autoSkipCoroutine = null;
+        }
+    }
+
+    private System.Collections.IEnumerator AutoSkipCurrentItem()
+    {
+        yield return new WaitForSeconds(autoSkipDelay);
+
+        // If item already changed or game ended, do nothing
+        if (!hasStarted || sequenceFinished || isWaitingForNext || CurrentItem == null)
+            yield break;
+
+        Debug.Log($"Auto-skipped '{CurrentItem.DisplayName}'");
+
+        // Skip item and move on
+        CurrentItem = null;
+        isWaitingForNext = true;
+
+        StartCoroutine(DelayedNextItem());
+    }
+
+    // ================= SEQUENCE LENGTH =================
+
+    private void ApplyItemsToPresentLimit()
+    {
+        // 0 or less = no limit
+        if (itemsToPresent <= 0) return;
+
+        // If they ask for more than we have, clamp to all items
+        if (itemsToPresent >= items.Count) return;
+
+        // Keep only the first N items (already shuffled if shuffleOnStart is true)
+        items.RemoveRange(itemsToPresent, items.Count - itemsToPresent);
+    }
+
     // ================= UI =================
 
     private void UpdateUI(ItemData item)
     {
-        if (nameText) nameText.text = item.displayName;
+        if (nameText) nameText.text = item.DisplayName;
         if (descriptionText) descriptionText.text = item.description ?? "";
 
         if (iconImage)
@@ -201,7 +270,7 @@ public class ItemSequencePresenter : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         sb.AppendLine($"{title} ({pile.Count} items):");
         foreach (var item in pile)
-            sb.AppendLine($"- {item.displayName}");
+            sb.AppendLine($"- {item.DisplayName}");
 
         return sb.ToString();
     }

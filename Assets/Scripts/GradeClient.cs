@@ -60,7 +60,7 @@ public class GradeClient : MonoBehaviour
                 {
                     if (j > 0) sb.Append(",");
 
-                    string name = list[j] != null ? (list[j].displayName ?? "") : "";
+                    string name = list[j] != null ? (list[j].DisplayName ?? "") : "";
                     sb.Append("\"").Append(EscapeJson(name)).Append("\"");
                 }
             }

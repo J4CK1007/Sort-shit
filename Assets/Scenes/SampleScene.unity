@@ -1296,33 +1296,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
+  - {fileID: 11400000, guid: b6bcd478940ac724caa5122ed507a6cd, type: 2}
+  - {fileID: 11400000, guid: eda4f85ddf355a940a3f3f71a5c745a1, type: 2}
+  - {fileID: 11400000, guid: 876a2c55d1ad68b489804bd66cccc962, type: 2}
   - {fileID: 11400000, guid: 966b9c829440501419d2b34961e90ce4, type: 2}
-  - {fileID: 11400000, guid: 99eb5d6335533124ab068bd2a56cf22f, type: 2}
+  - {fileID: 11400000, guid: 97afe3674c6e6694c8647e68e49e35c0, type: 2}
+  - {fileID: 11400000, guid: e299918e1d8482548bb66ffb1d780e77, type: 2}
   - {fileID: 11400000, guid: 6eee99aa979c65f47993b378b1d1cf6e, type: 2}
-  - {fileID: 11400000, guid: e301eae91abc56941bddde2fcd9971ff, type: 2}
-  - {fileID: 11400000, guid: 1873a0635780e3a419e2112b865d1089, type: 2}
-  - {fileID: 11400000, guid: 7c4d71436298f184ab774590d511d642, type: 2}
-  - {fileID: 11400000, guid: e8254693535313a4895e039cfa2aa08f, type: 2}
-  - {fileID: 11400000, guid: aa3300db91d584849ba6e018426b12f6, type: 2}
-  - {fileID: 11400000, guid: e81805fd593c20e46a8f04764a1c1ffe, type: 2}
-  - {fileID: 11400000, guid: da9e65b89623fa84e8e5826da74c35a6, type: 2}
-  - {fileID: 11400000, guid: 66af3cc22ea2859419606329229f239f, type: 2}
+  - {fileID: 11400000, guid: 54cd1cfb09725084ea715422f242603f, type: 2}
+  - {fileID: 11400000, guid: e1453a50576e0804f9935e2c328b1cfc, type: 2}
   - {fileID: 11400000, guid: bb003bdb26a136f4393bf29f86edbd7a, type: 2}
-  - {fileID: 11400000, guid: 914f62fdc2e83a6459b1975bbb299161, type: 2}
-  - {fileID: 11400000, guid: 219b3572a4572b546af55a8d157b2b2c, type: 2}
-  - {fileID: 11400000, guid: 0229ce4629354e54fa6136bc119b114e, type: 2}
-  - {fileID: 11400000, guid: 15013be530ab59d479288a4e68d0371c, type: 2}
+  - {fileID: 11400000, guid: 66af3cc22ea2859419606329229f239f, type: 2}
+  - {fileID: 11400000, guid: aa3300db91d584849ba6e018426b12f6, type: 2}
+  - {fileID: 11400000, guid: 6ee555afc6012854cb6a6e34b458d764, type: 2}
+  - {fileID: 11400000, guid: e81805fd593c20e46a8f04764a1c1ffe, type: 2}
+  - {fileID: 11400000, guid: 160f471b427c2cd42a9aa5a21ac3d016, type: 2}
+  - {fileID: 11400000, guid: e301eae91abc56941bddde2fcd9971ff, type: 2}
+  - {fileID: 11400000, guid: 38a7f5e0d48c72f4aba7708b0f7750f6, type: 2}
+  - {fileID: 11400000, guid: e8254693535313a4895e039cfa2aa08f, type: 2}
+  - {fileID: 11400000, guid: fcee812b9788caa419d7d0636603fc1a, type: 2}
+  - {fileID: 11400000, guid: 0fc6f3c2bdc6ab74d96d0188df1d4516, type: 2}
+  - {fileID: 11400000, guid: 41bbe33a793e2254cacea5fb77dea9ec, type: 2}
+  - {fileID: 11400000, guid: 178259c078cb68e45abef02a2ff0e963, type: 2}
+  - {fileID: 11400000, guid: 7c4d71436298f184ab774590d511d642, type: 2}
+  - {fileID: 11400000, guid: da9e65b89623fa84e8e5826da74c35a6, type: 2}
+  - {fileID: 11400000, guid: 27af0c0428ebc174aaf57948325b1fd0, type: 2}
+  - {fileID: 11400000, guid: e0d27951fe945554bbf4c0b668ae383e, type: 2}
+  - {fileID: 11400000, guid: 680f7c4fe3fde594b8b2084cbc46e8f8, type: 2}
+  - {fileID: 11400000, guid: 89af6347659957b479bc305cca543d21, type: 2}
+  - {fileID: 11400000, guid: 89f9c6cbd3ef9c34399eeff0fe193f42, type: 2}
   - {fileID: 11400000, guid: b2a5069bc98e14c449b8aaf63a13fdeb, type: 2}
-  - {fileID: 11400000, guid: 1c513289de134a74bb46fc6d29805d49, type: 2}
+  - {fileID: 11400000, guid: d75db95deb185e440b23f40ed0b7f98e, type: 2}
+  - {fileID: 11400000, guid: 3ad337e9136f8764688e0623590ec603, type: 2}
+  - {fileID: 11400000, guid: 5716310c4870c0a43a08777c2201fdce, type: 2}
+  - {fileID: 11400000, guid: 963a89031c0d7f74fbadfd6994249c0f, type: 2}
+  - {fileID: 11400000, guid: 8de5ac0dac7fa714d86189009c35081b, type: 2}
+  - {fileID: 11400000, guid: cef61698742948849938f298beed6d36, type: 2}
+  - {fileID: 11400000, guid: 01177e0dfbb5a7045b5c110600da8ab7, type: 2}
+  - {fileID: 11400000, guid: 3726266750fe20a479f77fa82ee5cf5a, type: 2}
+  - {fileID: 11400000, guid: 219b3572a4572b546af55a8d157b2b2c, type: 2}
+  - {fileID: 11400000, guid: f8338933d701a3a4685a9e1ff8b15e57, type: 2}
+  - {fileID: 11400000, guid: 5848ee4886b1e1745ad55b24870dc0ce, type: 2}
   - {fileID: 11400000, guid: 717e1c6fc10dbe647a260a9e20781726, type: 2}
   - {fileID: 11400000, guid: 510713a3ce1238e4184b8a5b308cb41b, type: 2}
+  - {fileID: 11400000, guid: 0229ce4629354e54fa6136bc119b114e, type: 2}
+  - {fileID: 11400000, guid: 99eb5d6335533124ab068bd2a56cf22f, type: 2}
+  - {fileID: 11400000, guid: 9f8ed38fcafd94947880386e2b53d41d, type: 2}
+  - {fileID: 11400000, guid: 1873a0635780e3a419e2112b865d1089, type: 2}
+  - {fileID: 11400000, guid: 914f62fdc2e83a6459b1975bbb299161, type: 2}
+  - {fileID: 11400000, guid: 15013be530ab59d479288a4e68d0371c, type: 2}
+  - {fileID: 11400000, guid: a08eeadc822bb30478d1739c1571cdcc, type: 2}
+  - {fileID: 11400000, guid: 1c513289de134a74bb46fc6d29805d49, type: 2}
+  - {fileID: 11400000, guid: 880a0b7a55c7ccf4eba7210f98d1fbb7, type: 2}
+  - {fileID: 11400000, guid: 0fb3bb8dbeef5f54ebeef805c5a028c7, type: 2}
+  - {fileID: 11400000, guid: 363c76de416e9814499ce42b3db10416, type: 2}
+  - {fileID: 11400000, guid: 3fdab215cafb846409eaf3c62870c72f, type: 2}
   shuffleOnStart: 1
+  itemsToPresent: 10
   nameText: {fileID: 1038418632}
   descriptionText: {fileID: 0}
   iconImage: {fileID: 1142962040}
   startButton: {fileID: 772512283}
   pileCount: 6
   nextItemDelay: 1.5
+  autoSkipDelay: 3
 --- !u!4 &683069282
 Transform:
   m_ObjectHideFlags: 0
@@ -1482,8 +1519,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1587,7 +1624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 14, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &772512283
@@ -1985,7 +2022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 12, y: 0}
+  m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1038418631

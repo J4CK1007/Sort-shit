@@ -1,15 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Item Data")]
+[CreateAssetMenu(fileName = "NewItem", menuName = "Sorting Game/Item")]
 public class ItemData : ScriptableObject
 {
-    public string displayName;
-
-    [TextArea] public string description;
-
-    // Optional: tags for scoring / grouping later
+    public string description;
+    public Sprite icon;
     public string[] tags;
 
-    // Optional: show an icon in UI
-    public Sprite icon;
+    public string DisplayName => name;
 }
