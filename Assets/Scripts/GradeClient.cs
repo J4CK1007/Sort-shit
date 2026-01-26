@@ -11,9 +11,18 @@ public class GradeClient : MonoBehaviour
     [SerializeField] private ItemSequencePresenter presenter;
 
     [Header("Server")]
-    [SerializeField] private string gradeUrl = "http://localhost:3000/grade";
+    [Tooltip("Full /grade endpoint URL")]
+    [SerializeField] private string gradeUrl = "https://graderbackend-c8wc.onrender.com/grade";
+
+    [Tooltip("Optional /health endpoint URL (recommended)")]
+    [SerializeField] private string healthUrl = "https://graderbackend-c8wc.onrender.com/health";
+
     [SerializeField] private int pileCount = 6;
-    [SerializeField] private int timeoutSeconds = 15;
+    [SerializeField] private int timeoutSeconds = 20;
+
+    [Header("Debug")]
+    [SerializeField] private bool pingHealthOnStart = true;
+    [SerializeField] private bool logRequestBody = true;
 
     // Head-to-head result (A = piles 1-3, B = piles 4-6)
     public event Action<WinnerResult> OnResultReceived;
@@ -21,6 +30,15 @@ public class GradeClient : MonoBehaviour
     private void Reset()
     {
         presenter = FindFirstObjectByType<ItemSequencePresenter>();
+    }
+
+    private void Start()
+    {
+        gradeUrl = NormalizeUrl(gradeUrl);
+        healthUrl = NormalizeUrl(healthUrl);
+
+        if (pingHealthOnStart && !string.IsNullOrWhiteSpace(healthUrl))
+            StartCoroutine(GetHealth(healthUrl));
     }
 
     private void OnEnable()
@@ -36,8 +54,17 @@ public class GradeClient : MonoBehaviour
 
     private void HandleFinished(Dictionary<int, List<ItemData>> piles)
     {
+        if (string.IsNullOrWhiteSpace(gradeUrl))
+        {
+            Debug.LogError("[GradeClient] gradeUrl is empty. Set it in the Inspector.");
+            return;
+        }
+
         string json = BuildRequestJson(piles);
-        Debug.Log("[GradeClient] Sending:\n" + json);
+
+        if (logRequestBody)
+            Debug.Log("[GradeClient] POST " + gradeUrl + "\n[GradeClient] Body:\n" + json);
+
         StartCoroutine(PostJson(gradeUrl, json));
     }
 
@@ -54,13 +81,18 @@ public class GradeClient : MonoBehaviour
 
             sb.Append("\"").Append(i).Append("\":[");
 
+            bool first = true;
+
             if (piles != null && piles.TryGetValue(i, out var list) && list != null && list.Count > 0)
             {
                 for (int j = 0; j < list.Count; j++)
                 {
-                    if (j > 0) sb.Append(",");
+                    string name = ExtractItemName(list[j]);
+                    if (string.IsNullOrWhiteSpace(name)) continue;
 
-                    string name = list[j] != null ? (list[j].DisplayName ?? "") : "";
+                    if (!first) sb.Append(",");
+                    first = false;
+
                     sb.Append("\"").Append(EscapeJson(name)).Append("\"");
                 }
             }
@@ -70,6 +102,13 @@ public class GradeClient : MonoBehaviour
 
         sb.Append("}}");
         return sb.ToString();
+    }
+
+    private static string ExtractItemName(ItemData item)
+    {
+        if (item == null) return "";
+        // Your ItemSequencePresenter uses DisplayName, so we do too.
+        return (item.DisplayName ?? "").Trim();
     }
 
     private IEnumerator PostJson(string url, string json)
@@ -82,29 +121,94 @@ public class GradeClient : MonoBehaviour
 
         yield return req.SendWebRequest();
 
+        string body = req.downloadHandler != null ? req.downloadHandler.text : "";
+
         if (req.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"[GradeClient] Failed: HTTP {req.responseCode}\n{req.error}\n{req.downloadHandler.text}");
+            Debug.LogError($"[GradeClient] Failed: HTTP {req.responseCode}\n{req.error}\n{body}");
             yield break;
         }
 
-        string responseText = req.downloadHandler.text;
-        Debug.Log("[GradeClient] Response:\n" + responseText);
+        Debug.Log("[GradeClient] Response:\n" + body);
 
-        WinnerResult parsed = null;
+        WinnerResult parsed;
         try
         {
-            parsed = JsonUtility.FromJson<WinnerResult>(responseText);
+            parsed = JsonUtility.FromJson<WinnerResult>(body);
         }
         catch (Exception e)
         {
-            Debug.LogError("[GradeClient] JSON parse failed: " + e.Message);
+            Debug.LogError("[GradeClient] JSON parse failed: " + e.Message + "\nRaw:\n" + body);
+            yield break;
         }
 
-        if (parsed != null)
+        if (parsed == null)
         {
-            OnResultReceived?.Invoke(parsed);
+            Debug.LogError("[GradeClient] Parsed result is null.\nRaw:\n" + body);
+            yield break;
         }
+
+        // Defensive normalization so WinnerUI never breaks
+        parsed.winner = NormalizeWinner(parsed.winner);
+        parsed.scoreA = Clamp01_100(parsed.scoreA);
+        parsed.scoreB = Clamp01_100(parsed.scoreB);
+        parsed.reason = parsed.reason ?? "";
+
+        OnResultReceived?.Invoke(parsed);
+    }
+
+    [ContextMenu("Ping /health")]
+    public void PingHealth()
+    {
+        if (string.IsNullOrWhiteSpace(healthUrl))
+        {
+            Debug.LogWarning("[GradeClient] healthUrl is empty.");
+            return;
+        }
+
+        StartCoroutine(GetHealth(NormalizeUrl(healthUrl)));
+    }
+
+    private IEnumerator GetHealth(string url)
+    {
+        using var req = UnityWebRequest.Get(url);
+        req.timeout = Mathf.Max(5, timeoutSeconds);
+
+        Debug.Log("[GradeClient] GET " + url);
+
+        yield return req.SendWebRequest();
+
+        string body = req.downloadHandler != null ? req.downloadHandler.text : "";
+
+        if (req.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"[GradeClient] /health failed: HTTP {req.responseCode}\n{req.error}\n{body}");
+            yield break;
+        }
+
+        Debug.Log("[GradeClient] /health OK:\n" + body);
+    }
+
+    private static float Clamp01_100(float v)
+    {
+        if (float.IsNaN(v) || float.IsInfinity(v)) return 0f;
+        return Mathf.Clamp(v, 0f, 100f);
+    }
+
+    private static string NormalizeWinner(string w)
+    {
+        if (string.IsNullOrWhiteSpace(w)) return "Tie";
+        w = w.Trim().ToUpperInvariant();
+
+        if (w == "A") return "A";
+        if (w == "B") return "B";
+        return "Tie";
+    }
+
+    private static string NormalizeUrl(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return url;
+        return url.Trim();
     }
 
     private static string EscapeJson(string s)
@@ -117,4 +221,3 @@ public class GradeClient : MonoBehaviour
                 .Replace("\t", "\\t");
     }
 }
-
